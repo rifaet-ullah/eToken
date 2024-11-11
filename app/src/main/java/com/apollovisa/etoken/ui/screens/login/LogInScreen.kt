@@ -4,5 +4,10 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun LogInScreen(onLogInSuccessful: () -> Unit) {
-    LogInScreenContent()
+    LogInScreenContent(
+        viewState = LogInViewState.InputState(),
+        onEmailChange = {},
+        onPasswordChange = {},
+        onLogInClick = {}
+    )
 }

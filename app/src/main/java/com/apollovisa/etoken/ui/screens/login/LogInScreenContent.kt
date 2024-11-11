@@ -9,24 +9,41 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Key
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.apollovisa.etoken.ui.components.InputField
 import com.apollovisa.etoken.ui.theme.ETokenTheme
 
 @Composable
-fun LogInScreenContent() {
+fun LogInScreenContent(
+    viewState: LogInViewState,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onLogInClick: () -> Unit
+) {
+    var showPassword by remember { mutableStateOf(false) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -41,32 +58,47 @@ fun LogInScreenContent() {
             color = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.height(24.dp))
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            placeholder = { Text("Email") },
-            label = { Text("Email") },
-            leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email") },
-            modifier = Modifier.fillMaxWidth()
+        InputField(
+            value = viewState.email,
+            onChange = onEmailChange,
+            placeholder = "Email",
+            leadingIcon = Icons.Outlined.Email,
+            autoCorrectEnable = false,
+            keyboardType = KeyboardType.Email,
+            imeAction = ImeAction.Next,
+            enable = viewState is LogInViewState.InputState,
+            errorMessage = viewState.emailError,
         )
         Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            placeholder = { Text("Password") },
-            label = { Text("Password") },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Lock,
-                    contentDescription = "Password"
-                )
+        InputField(
+            value = viewState.password,
+            onChange = onPasswordChange,
+            placeholder = "Password",
+            leadingIcon = Icons.Outlined.Key,
+            trailingIcon = if (showPassword) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
+            onTrailingIconClick = {
+                showPassword = !showPassword
             },
-            trailingIcon = {},
-            modifier = Modifier.fillMaxWidth()
+            autoCorrectEnable = false,
+            keyboardType = KeyboardType.Password,
+            imeAction = ImeAction.Go,
+            visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+            enable = viewState is LogInViewState.InputState,
+            errorMessage = viewState.passwordError,
         )
 
+        viewState.errorMessage?.let {
+            Text(
+                it,
+                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.error,
+                textAlign = TextAlign.Center,
+            )
+        }
+
         Button(
-            onClick = {},
+            onClick = onLogInClick,
+            enabled = viewState.emailError == null && viewState.passwordError == null,
             shape = RoundedCornerShape(4.dp),
             modifier = Modifier
                 .fillMaxWidth()
@@ -79,8 +111,24 @@ fun LogInScreenContent() {
 
 @Preview(showBackground = true)
 @Composable
-private fun LogInScreenContentPreview() {
+private fun LogInScreenContentInputStatePreview() {
     ETokenTheme {
-        LogInScreenContent()
+        LogInScreenContent(
+            viewState = LogInViewState.InputState(),
+            onEmailChange = {},
+            onPasswordChange = {},
+            onLogInClick = {})
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LogInScreenContentAuthenticationStatePreview() {
+    ETokenTheme {
+        LogInScreenContent(
+            viewState = LogInViewState.AuthenticationState,
+            onEmailChange = {},
+            onPasswordChange = {},
+            onLogInClick = {})
     }
 }
