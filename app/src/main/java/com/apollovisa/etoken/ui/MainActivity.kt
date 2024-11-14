@@ -28,7 +28,12 @@ class MainActivity : ComponentActivity() {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     NavHost(navController = navController, startDestination = Route.Splash) {
                         composable<Route.Splash> {
-                            SplashScreen(actionAfterDelay = { navController.navigate(Route.LogIn) })
+                            SplashScreen(
+                                actionAfterDelay = {
+                                    navController.popBackStack()
+                                    navController.navigate(Route.LogIn)
+                                }
+                            )
                         }
 
                         composable<Route.LogIn> {

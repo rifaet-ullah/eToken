@@ -1,9 +1,11 @@
 package com.apollovisa.etoken.domain.models
 
-import java.time.LocalDateTime
-
 data class SMSMessage(
+    val message: String,
     val sender: String,
-    val dateTime: LocalDateTime,
-    val details: String,
+    val date: Long,
+    val read: Boolean,
+    val type: Int,
+    val thread: Int,
+    val service: String
 )
