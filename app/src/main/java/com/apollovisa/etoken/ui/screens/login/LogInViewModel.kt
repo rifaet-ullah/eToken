@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,7 +32,8 @@ class LogInViewModel @Inject constructor() : ViewModel() {
     fun onLogInButtonClick() {
         _viewState.value = LogInViewState.AuthenticationState
         viewModelScope.launch {
-            //
+            delay(2000)
+            _viewState.value = LogInViewState.SuccessState
         }
     }
 }

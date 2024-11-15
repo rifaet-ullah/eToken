@@ -29,9 +29,13 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = Route.Splash) {
                         composable<Route.Splash> {
                             SplashScreen(
-                                actionAfterDelay = {
+                                onAuthenticationSuccess = {
                                     navController.popBackStack()
-                                    navController.navigate(Route.LogIn)
+                                    navController.navigate(Route.Dashboard)
+                                },
+                                onAuthenticationFailure = {
+                                    navController.popBackStack()
+                                    navController.navigate(Route.Dashboard)
                                 }
                             )
                         }

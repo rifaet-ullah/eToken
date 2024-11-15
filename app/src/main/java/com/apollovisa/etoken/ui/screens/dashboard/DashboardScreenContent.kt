@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,8 +27,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.apollovisa.etoken.domain.models.SMSMessage
+import com.apollovisa.etoken.domain.models.parsedDate
 import com.apollovisa.etoken.ui.theme.ETokenTheme
-import java.time.LocalDateTime
 
 @Composable
 fun DashboardScreenContent(messages: List<SMSMessage>) {
@@ -58,20 +60,25 @@ fun DashboardScreenContent(messages: List<SMSMessage>) {
 @Composable
 private fun SMSMessageTile(sms: SMSMessage) {
     Row {
-        Box(modifier = Modifier.size(32.dp)) {
-            Icon(imageVector = Icons.Outlined.AccountCircle, contentDescription = "Account")
-        }
+        Icon(
+            imageVector = Icons.Outlined.AccountCircle,
+            contentDescription = "Account",
+            modifier = Modifier.size(32.dp)
+        )
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp)
         ) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(sms.sender, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                Text(sms.dateTime.toString(), fontSize = 12.sp)
+                Text(sms.date.parsedDate(), fontSize = 12.sp)
             }
-            Text(sms.details)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(sms.message)
         }
     }
 }
@@ -82,12 +89,24 @@ private fun DashboardScreenContentPreview() {
     ETokenTheme {
         DashboardScreenContent(
             messages = listOf(
-                SMSMessage(sender = "GP", dateTime = LocalDateTime.now(), details = "Big Sale!"),
-                SMSMessage(sender = "Robi", dateTime = LocalDateTime.now(), details = "Big Sale!"),
-                SMSMessage(sender = "Robi", dateTime = LocalDateTime.now(), details = "Big Sale!"),
-                SMSMessage(sender = "Robi", dateTime = LocalDateTime.now(), details = "Big Sale!"),
-                SMSMessage(sender = "GP", dateTime = LocalDateTime.now(), details = "Big Sale!"),
-                SMSMessage(sender = "GP", dateTime = LocalDateTime.now(), details = "Big Sale!"),
+                SMSMessage(
+                    message = "Big Sale!",
+                    sender = "GP",
+                    date = 12121212,
+                    read = false,
+                    type = 1,
+                    thread = 1,
+                    service = "",
+                ),
+                SMSMessage(
+                    message = "Big Sale!",
+                    sender = "Robi",
+                    date = 12121212,
+                    read = false,
+                    type = 1,
+                    thread = 1,
+                    service = "",
+                )
             )
         )
     }
