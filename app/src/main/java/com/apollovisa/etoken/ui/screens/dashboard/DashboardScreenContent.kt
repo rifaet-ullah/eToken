@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -78,7 +79,7 @@ private fun SMSMessageTile(sms: SMSMessage) {
                 Text(sms.date.parsedDate(), fontSize = 12.sp)
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Text(sms.message)
+            Text(sms.message, fontSize = 16.sp, maxLines = 2, overflow = TextOverflow.Ellipsis)
         }
     }
 }
