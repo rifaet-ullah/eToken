@@ -5,6 +5,7 @@
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="true" />
+
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
@@ -31,7 +32,7 @@
         </activity>
 
         <receiver
-            android:name=".data.IncomingSMSListener"
+            android:name=".ui.broadcast_listener.IncomingSMSListener"
             android:exported="true"
             android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>

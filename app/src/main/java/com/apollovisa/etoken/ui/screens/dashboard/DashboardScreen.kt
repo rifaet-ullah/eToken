@@ -15,7 +15,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 fun DashboardScreen(viewModel: DashboardScreenViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val requiredPermissions = arrayOf(
-        Manifest.permission.READ_SMS
+        Manifest.permission.READ_SMS,
+        Manifest.permission.RECEIVE_SMS
     )
     var permissionGranted = requiredPermissions.all {
         ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
