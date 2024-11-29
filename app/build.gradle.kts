@@ -74,6 +74,12 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     annotationProcessor(libs.hilt.compiler)
     kapt(libs.hilt.android.compiler)
+
+    // Ktor Client
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
 }
 
 kapt {
