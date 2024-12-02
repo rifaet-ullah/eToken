@@ -17,7 +17,7 @@ class DashboardScreenViewModel @Inject constructor(
     suspend fun fetchInitialMessage() {
         smsMessages.value = smsMessageService
             .getLastMessageBySenders()
-            .sortedBy { it.date }
+            .sortedBy { it.timestamp }
             .reversed()
     }
 }

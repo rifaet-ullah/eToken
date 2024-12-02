@@ -76,7 +76,7 @@ private fun SMSMessageTile(sms: SMSMessage) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(sms.sender, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                Text(sms.date.parsedDate(), fontSize = 12.sp)
+                Text(sms.timestamp.parsedDate(), fontSize = 12.sp)
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(sms.message, fontSize = 16.sp, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -91,22 +91,16 @@ private fun DashboardScreenContentPreview() {
         DashboardScreenContent(
             messages = listOf(
                 SMSMessage(
-                    message = "Big Sale!",
                     sender = "GP",
-                    date = 12121212,
-                    read = false,
-                    type = 1,
-                    thread = 1,
-                    service = "",
+                    receiver = "",
+                    message = "Big Sale!",
+                    timestamp = 12312312
                 ),
                 SMSMessage(
-                    message = "Big Sale!",
                     sender = "Robi",
-                    date = 12121212,
-                    read = false,
-                    type = 1,
-                    thread = 1,
-                    service = "",
+                    receiver = "",
+                    message = "Big Sale!",
+                    timestamp = 12312312
                 )
             )
         )
