@@ -1,6 +1,7 @@
 package com.apollovisa.etoken.domain.models
 
-data class SIM(
-    val name: String,
+data class SimCard(
+    val slotIndex: Int,
+    val slotName: String,
     val number: String
 )

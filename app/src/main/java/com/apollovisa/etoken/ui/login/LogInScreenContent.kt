@@ -1,4 +1,4 @@
-package com.apollovisa.etoken.ui.screens.login
+package com.apollovisa.etoken.ui.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

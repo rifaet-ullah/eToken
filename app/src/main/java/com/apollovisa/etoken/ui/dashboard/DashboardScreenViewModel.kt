@@ -1,4 +1,4 @@
-package com.apollovisa.etoken.ui.screens.dashboard
+package com.apollovisa.etoken.ui.dashboard
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf

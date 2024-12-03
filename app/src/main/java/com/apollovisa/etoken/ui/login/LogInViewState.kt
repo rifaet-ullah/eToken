@@ -1,4 +1,4 @@
-package com.apollovisa.etoken.ui.screens.login
+package com.apollovisa.etoken.ui.login
 
 sealed class LogInViewState(
     val email: String = "",

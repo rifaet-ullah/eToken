@@ -10,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.apollovisa.etoken.ui.screens.dashboard.DashboardScreen
-import com.apollovisa.etoken.ui.screens.login.LogInScreen
-import com.apollovisa.etoken.ui.screens.splash.SplashScreen
+import com.apollovisa.etoken.ui.dashboard.DashboardScreen
+import com.apollovisa.etoken.ui.login.LogInScreen
+import com.apollovisa.etoken.ui.splash.SplashScreen
 import com.apollovisa.etoken.ui.theme.ETokenTheme
 import dagger.hilt.android.AndroidEntryPoint
 

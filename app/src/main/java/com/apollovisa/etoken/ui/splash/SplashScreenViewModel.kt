@@ -1,4 +1,4 @@
-package com.apollovisa.etoken.ui.screens.splash
+package com.apollovisa.etoken.ui.splash
 
 import androidx.lifecycle.ViewModel
 import com.apollovisa.etoken.domain.models.User

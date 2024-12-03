@@ -1,4 +1,4 @@
-package com.apollovisa.etoken.ui.screens.splash
+package com.apollovisa.etoken.ui.splash
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

@@ -1,4 +1,4 @@
-package com.apollovisa.etoken.ui.screens.login
+package com.apollovisa.etoken.ui.login
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

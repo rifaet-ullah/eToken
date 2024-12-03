@@ -1,4 +1,4 @@
-package com.apollovisa.etoken.ui.screens.dashboard
+package com.apollovisa.etoken.ui.dashboard
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -39,5 +39,5 @@ fun DashboardScreen(viewModel: DashboardScreenViewModel = hiltViewModel()) {
         }
     }
 
-    DashboardScreenContent(messages = viewModel.smsMessages.value)
+    DashboardScreenContent()
 }
