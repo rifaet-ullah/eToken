@@ -42,20 +42,18 @@ import com.apollovisa.etoken.domain.models.SimCard
 import com.apollovisa.etoken.ui.theme.ETokenTheme
 
 @Composable
-fun DashboardScreenContent() {
+fun DashboardScreenContent(simCards: List<SimCard> = emptyList()) {
     val scrollState = rememberScrollState()
     val roundedCornerSize = 32.dp
 
-    Scaffold(
-        floatingActionButton = {
-            Button(onClick = {}) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add task")
-                    Text("Add task")
-                }
+    Scaffold(floatingActionButton = {
+        Button(onClick = {}) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add task")
+                Text("Add task")
             }
         }
-    ) { paddingValues ->
+    }) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)
@@ -69,21 +67,24 @@ fun DashboardScreenContent() {
                     .fillMaxWidth()
                     .clip(
                         shape = RoundedCornerShape(
-                            bottomStart = roundedCornerSize,
-                            bottomEnd = roundedCornerSize
+                            bottomStart = roundedCornerSize, bottomEnd = roundedCornerSize
                         )
                     )
             )
             Column(modifier = Modifier.padding(16.dp)) {
                 Text("Registered SIM", fontWeight = FontWeight.Medium, fontSize = 18.sp)
                 Spacer(modifier = Modifier.height(8.dp))
-                RegisteredSimCard(
-                    simCard = SimCard(
-                        slotIndex = 0,
-                        slotName = "SIM1",
-                        number = "+880193456789"
+                if (simCards.isEmpty()) {
+                    Text(
+                        "No registered SIM Card found.",
+                        fontWeight = FontWeight.Light,
+                        fontSize = 14.sp
                     )
-                )
+                } else {
+                    simCards.forEach {
+                        RegisteredSimCard(it)
+                    }
+                }
                 Spacer(modifier = Modifier.height(8.dp))
                 Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
                     IconButton(onClick = {}) {
@@ -108,11 +109,9 @@ fun DashboardScreenContent() {
 
 @Composable
 private fun RegisteredSimCard(
-    simCard: SimCard,
-    onClick: () -> Unit = {},
-    onViewDetailsClick: () -> Unit = {}
+    simCard: SimCard, onClick: () -> Unit = {}, onViewDetailsClick: () -> Unit = {}
 ) {
-    val serviceNumberCode = simCard.number.replace("+88", "").substring(0..2)
+    val serviceNumberCode = simCard.phoneNumber.replace("+88", "").substring(0..2)
     val backgroundColor = when (serviceNumberCode) {
         "017" -> Color.Blue.copy(alpha = 0.5f)
         "013" -> Color.Blue.copy(alpha = 0.5f)
@@ -146,7 +145,7 @@ private fun RegisteredSimCard(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    simCard.number,
+                    simCard.phoneNumber,
                     fontWeight = FontWeight.Light,
                     fontSize = 16.sp,
                     color = textColor

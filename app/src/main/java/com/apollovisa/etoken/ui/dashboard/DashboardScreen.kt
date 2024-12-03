@@ -35,7 +35,7 @@ fun DashboardScreen(viewModel: DashboardScreenViewModel = hiltViewModel()) {
         if (!permissionGranted) {
             permissionLauncher.launch(requiredPermissions)
         } else {
-            viewModel.fetchInitialMessage()
+            viewModel.fetchSimCards()
         }
     }
 
