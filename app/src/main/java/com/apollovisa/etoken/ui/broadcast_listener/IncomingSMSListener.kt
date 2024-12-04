@@ -6,7 +6,9 @@ import android.content.Intent
 import android.provider.Telephony
 import android.util.Log
 import com.apollovisa.etoken.data.dto.OtpReceiveDto
+import com.apollovisa.etoken.data.repository.SharedPreferenceSimCardRepository
 import com.apollovisa.etoken.domain.models.SMSMessage
+import com.apollovisa.etoken.domain.repository.SimCardRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
@@ -26,6 +28,7 @@ import java.util.Date
 import java.util.Locale
 
 class IncomingSMSListener : BroadcastReceiver() {
+
     private val otpIndex = mapOf(
         "IVAC_BD" to 0,
         "01708404440" to 0,
@@ -38,31 +41,34 @@ class IncomingSMSListener : BroadcastReceiver() {
         if (intent?.action == "android.provider.Telephony.SMS_RECEIVED") {
             val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
 
-            intent.extras?.let {
-                Log.d("onReceive", "Subscription Index: ${it.get("android.telephony.extra.SUBSCRIPTION_INDEX")}")
-                Log.d("onReceive", "Subscription: ${it.get("subscription")}")
-                Log.d("onReceive", "Message ID: ${it.get("messageId")}")
-                Log.d("onReceive", "Format: ${it.get("format")}")
-                Log.d("onReceive", "Slot Index: ${it.get("android.telephony.extra.SLOT_INDEX")}")
-                Log.d("onReceive", "Phone: ${it.get("phone")}")
-            }
-
+            val slotIndex = intent.extras?.getInt("android.telephony.extra.SLOT_INDEX") ?: return
             val sender = messages[0].originatingAddress ?: return
             val fullMessage = messages
                 .map { it.displayMessageBody }
                 .reduce { aggregate, partial ->
                     "$aggregate $partial"
                 }
-//            CoroutineScope(Dispatchers.IO).launch {
-//                sendOTP(
-//                    smsMessage = SMSMessage(
-//                        sender = sender,
-//                        receiver = "",
-//                        message = fullMessage,
-//                        timestamp = messages[0].timestampMillis
-//                    )
-//                )
-//            }
+
+            val sharedPreferences = context?.getSharedPreferences(
+                "SIM_CARD", Context.MODE_PRIVATE
+            ) ?: return
+            val simCardRepository: SimCardRepository = SharedPreferenceSimCardRepository(
+                sharedPreferences
+            )
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val simCard = simCardRepository.getSimCards().find { it.slotIndex == slotIndex }
+                val receiver = simCard?.phoneNumber ?: return@launch
+
+                sendOTP(
+                    smsMessage = SMSMessage(
+                        sender = sender,
+                        receiver = receiver,
+                        message = fullMessage,
+                        timestamp = messages[0].timestampMillis
+                    )
+                )
+            }
         }
     }
 
@@ -103,8 +109,7 @@ class IncomingSMSListener : BroadcastReceiver() {
                     val data = response.body<OtpReceiveDto>()
                     Log.d("sendOTP", "Response: $data")
                     break
-                }
-                else currentDatetime = System.currentTimeMillis()
+                } else currentDatetime = System.currentTimeMillis()
             } catch (e: Exception) {
                 Log.e("IncomingSMSListener", "Exception message: ${e.message}")
                 delay(1000)

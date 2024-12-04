@@ -2,6 +2,8 @@ package com.apollovisa.etoken.data.service
 
 import android.content.Context
 import android.net.Uri
+import android.provider.Telephony
+import android.util.Log
 import com.apollovisa.etoken.domain.models.SMSMessage
 import com.apollovisa.etoken.domain.service.SMSMessageService
 import kotlin.collections.plus
@@ -30,11 +32,18 @@ class DefaultSMSMessageService(context: Context) : SMSMessageService {
 
     private fun getMessagesByType(type: String): List<SMSMessage> {
         val messages = mutableListOf<SMSMessage>()
-        val cursor = resolver.query(Uri.parse("content://sms/$type"), null, null, null, null)
+        val projection = arrayOf(
+            Telephony.Sms.SUBSCRIPTION_ID, Telephony.Sms.ADDRESS, Telephony.Sms.BODY
+        )
+        val cursor = resolver.query(Uri.parse("content://sms/$type"), projection, null, null, null)
         cursor?.use {
             val indexMessage = it.getColumnIndex("body")
             val indexSender = it.getColumnIndex("address")
             val indexDate = it.getColumnIndex("date")
+
+            Log.d("cursor", "Subscription ID: ${it.getInt(it.getColumnIndexOrThrow(Telephony.Sms.SUBSCRIPTION_ID))}")
+            Log.d("cursor", "Subscription ID: ${it.getString(it.getColumnIndexOrThrow(Telephony.Sms.ADDRESS))}")
+            Log.d("cursor", "Subscription ID: ${it.getInt(it.getColumnIndexOrThrow(Telephony.Sms.BODY))}")
 
             while (it.moveToNext()) {
                 messages.add(
