@@ -35,9 +35,15 @@ fun DashboardScreen(viewModel: DashboardScreenViewModel = hiltViewModel()) {
         if (!permissionGranted) {
             permissionLauncher.launch(requiredPermissions)
         } else {
-            viewModel.fetchSimCards()
+            viewModel.initUiState()
         }
     }
 
-    DashboardScreenContent()
+    DashboardScreenContent(
+        uiState = viewModel.uiState.value,
+        onAddSimCardButtonClick = viewModel::onAddSimCardButtonClick,
+        onDismissRegisterNewSimCardPopUp = viewModel::onDismissRegisterNewSim,
+        onRegisterNewSimCardClick = viewModel::onRegisterNewSim,
+        onRemoveSimCard = viewModel::onRemoveSimCard,
+    )
 }

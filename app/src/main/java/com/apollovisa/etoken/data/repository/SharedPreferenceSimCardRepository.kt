@@ -38,7 +38,7 @@ class SharedPreferenceSimCardRepository(
 
     override suspend fun getSimCards(): List<SimCard> {
         return (0..2)
-            .map {slotIndex ->
+            .map { slotIndex ->
                 getSimCardBySlotIndex(slotIndex)
             }
             .filterNotNull()
