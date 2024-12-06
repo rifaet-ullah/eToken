@@ -7,6 +7,7 @@ import android.provider.Telephony
 import android.util.Log
 import com.apollovisa.etoken.data.dto.OtpReceiveDto
 import com.apollovisa.etoken.data.repository.SharedPreferenceSimCardRepository
+import com.apollovisa.etoken.domain.models.EndPointConfig
 import com.apollovisa.etoken.domain.models.SMSMessage
 import com.apollovisa.etoken.domain.repository.SimCardRepository
 import io.ktor.client.HttpClient
@@ -29,12 +30,27 @@ import java.util.Locale
 
 class IncomingSMSListener : BroadcastReceiver() {
 
-    private val otpIndex = mapOf(
-        "IVAC_BD" to 0,
-        "01708404440" to 0,
-        "bKash" to 5,
-        "NAGAD" to 9,
-        "IVAC FEES" to 6
+    private val configs = mapOf(
+        "IVAC_BD" to EndPointConfig(
+            index = 0,
+            endPoint = "http://3.131.9.114/IndianVisaOtp/ivacOtpReceive.php"
+        ),
+        "01708404440" to EndPointConfig(
+            index = 0,
+            endPoint = "http://3.131.9.114/IndianVisaOtp/ivacOtpReceive.php"
+        ),
+        "bKash" to EndPointConfig(
+            index = 5,
+            endPoint = "http://3.131.9.114/IndianVisaOtp/nbOtpReceive.php"
+        ),
+        "NAGAD" to EndPointConfig(
+            index = 9,
+            endPoint = "http://3.131.9.114/IndianVisaOtp/nbOtpReceive.php"
+        ),
+        "IVAC FEES" to EndPointConfig(
+            index = 6,
+            endPoint = "http://3.131.9.114/IndianVisaOtp/ivacFeeOtpReceive.php"
+        )
     )
 
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -74,7 +90,7 @@ class IncomingSMSListener : BroadcastReceiver() {
 
     suspend fun sendOTP(smsMessage: SMSMessage) {
         Log.d("sendOTP", "SMS: $smsMessage")
-        val index = otpIndex[smsMessage.sender] ?: return
+        val config = configs[smsMessage.sender] ?: return
 
         val client = HttpClient(Android) {
             install(ContentNegotiation) {
@@ -90,7 +106,7 @@ class IncomingSMSListener : BroadcastReceiver() {
         while (currentDatetime < endDatetime) {
             try {
                 Log.d("sendOTP", "Trying with: $smsMessage")
-                val response = client.post("http://3.131.9.114/IndianVisaOtp/newOtpReceive.php") {
+                val response = client.post(config.endPoint) {
                     headers {
                         append(HttpHeaders.ContentType, "application/json")
                     }
@@ -101,7 +117,7 @@ class IncomingSMSListener : BroadcastReceiver() {
                             "receiver" to smsMessage.receiver,
                             "message" to smsMessage.message,
                             "receivedAt" to formatter.format(date),
-                            "otp" to smsMessage.message.split(" ")[index]
+                            "otp" to smsMessage.message.split(" ")[config.index]
                         )
                     )
                 }
@@ -112,7 +128,7 @@ class IncomingSMSListener : BroadcastReceiver() {
                 } else currentDatetime = System.currentTimeMillis()
             } catch (e: Exception) {
                 Log.e("IncomingSMSListener", "Exception message: ${e.message}")
-                delay(1000)
+                delay(3000)
             }
         }
     }
