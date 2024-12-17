@@ -70,18 +70,32 @@ fun DashboardScreenContent(
                 .padding(paddingValues)
                 .scrollable(state = scrollState, orientation = Orientation.Horizontal)
         ) {
-            Image(
-                painter = painterResource(R.drawable.tokenbd),
-                contentDescription = "TokenBD",
-                contentScale = ContentScale.FillWidth,
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(
-                        shape = RoundedCornerShape(
-                            bottomStart = roundedCornerSize, bottomEnd = roundedCornerSize
-                        )
+                    .background(
+                        color = Color(red = 37, green = 150, blue = 190),
+                        shape = RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
                     )
-            )
+                    .padding(vertical = 24.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.timelytravel),
+                    contentDescription = "TokenBD",
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier
+                        .size(128.dp)
+                        .clip(
+                            shape = RoundedCornerShape(
+                                bottomStart = roundedCornerSize, bottomEnd = roundedCornerSize
+                            )
+                        )
+                )
+                Text("TIMELY", fontSize = 32.sp, fontWeight = FontWeight.Bold)
+                Text("TRAVEL", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+            }
             Column(modifier = Modifier.padding(16.dp)) {
                 Text("Registered SIM", fontWeight = FontWeight.Medium, fontSize = 18.sp)
                 Spacer(modifier = Modifier.height(8.dp))
@@ -274,6 +288,6 @@ private fun AddSimCardPopUp(
 @Composable
 private fun DashboardScreenContentPreview() {
     ETokenTheme {
-        DashboardScreenContent(uiState = DashboardUIState.AddSimCardPopUp(emptyList(), null))
+        DashboardScreenContent(uiState = DashboardUIState.Initial(emptyList()))
     }
 }

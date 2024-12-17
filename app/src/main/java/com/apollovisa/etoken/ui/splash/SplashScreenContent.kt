@@ -46,7 +46,7 @@ fun SplashScreenContent() {
                 modifier = Modifier.width(200.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.tokenbd),
+                    painter = painterResource(id = R.drawable.timelytravel),
                     contentDescription = "Message Icon",
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier.fillMaxWidth()
