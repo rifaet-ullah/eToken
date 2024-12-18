@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.apollovisa.etoken.ui.dashboard.DashboardScreen
 import com.apollovisa.etoken.ui.login.LogInScreen
+import com.apollovisa.etoken.ui.sim.SimCardScreen
 import com.apollovisa.etoken.ui.splash.SplashScreen
 import com.apollovisa.etoken.ui.theme.ETokenTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,7 +46,19 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable<Route.Dashboard> {
-                            DashboardScreen()
+                            DashboardScreen(
+                                onSimCardClick = {
+                                    navController.navigate(Route.SimCard(it.slotIndex))
+                                }
+                            )
+                        }
+
+                        composable<Route.SimCard> {
+                            SimCardScreen(
+                                onSimCardDeletionComplete = {
+                                    navController.popBackStack()
+                                }
+                            )
                         }
                     }
                 }

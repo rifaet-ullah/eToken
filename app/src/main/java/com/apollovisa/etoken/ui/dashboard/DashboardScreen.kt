@@ -10,9 +10,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.apollovisa.etoken.domain.models.SimCard
 
 @Composable
-fun DashboardScreen(viewModel: DashboardScreenViewModel = hiltViewModel()) {
+fun DashboardScreen(
+    onSimCardClick: (SimCard) -> Unit = {},
+    viewModel: DashboardScreenViewModel = hiltViewModel()
+) {
     val context = LocalContext.current
     val requiredPermissions = arrayOf(
         Manifest.permission.READ_SMS,
@@ -44,6 +48,6 @@ fun DashboardScreen(viewModel: DashboardScreenViewModel = hiltViewModel()) {
         onAddSimCardButtonClick = viewModel::onAddSimCardButtonClick,
         onDismissRegisterNewSimCardPopUp = viewModel::onDismissRegisterNewSim,
         onRegisterNewSimCardClick = viewModel::onRegisterNewSim,
-        onRemoveSimCard = viewModel::onRemoveSimCard,
+        onSimCardClick = onSimCardClick,
     )
 }

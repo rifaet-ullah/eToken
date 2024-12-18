@@ -49,11 +49,4 @@ class DashboardScreenViewModel @Inject constructor(
             _uiState.value = DashboardUIState.Initial(cards = simCardRepository.getSimCards())
         }
     }
-
-    fun onRemoveSimCard(simCard: SimCard) {
-        viewModelScope.launch {
-            simCardRepository.delete(simCard.slotIndex)
-            _uiState.value = DashboardUIState.Initial(cards = simCardRepository.getSimCards())
-        }
-    }
 }

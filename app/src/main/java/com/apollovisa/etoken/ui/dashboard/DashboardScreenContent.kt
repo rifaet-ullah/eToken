@@ -16,8 +16,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -58,7 +58,7 @@ fun DashboardScreenContent(
     onAddSimCardButtonClick: () -> Unit = {},
     onDismissRegisterNewSimCardPopUp: () -> Unit = {},
     onRegisterNewSimCardClick: (String, String) -> Unit = { _, _ -> },
-    onRemoveSimCard: (SimCard) -> Unit = {}
+    onSimCardClick: (SimCard) -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
     val roundedCornerSize = 32.dp
@@ -76,10 +76,10 @@ fun DashboardScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        color = Color(red = 37, green = 150, blue = 190),
+                        color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
                     )
-                    .padding(vertical = 24.dp)
+                    .height(252.dp)
             ) {
                 Image(
                     painter = painterResource(R.drawable.timelytravel),
@@ -93,8 +93,18 @@ fun DashboardScreenContent(
                             )
                         )
                 )
-                Text("TIMELY", fontSize = 32.sp, fontWeight = FontWeight.Bold)
-                Text("TRAVEL", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+                Text(
+                    "TIMELY",
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+                Text(
+                    "TRAVEL",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
             Column(modifier = Modifier.padding(16.dp)) {
                 Text("Registered SIM", fontWeight = FontWeight.Medium, fontSize = 18.sp)
@@ -107,7 +117,7 @@ fun DashboardScreenContent(
                     )
                 } else {
                     uiState.simCards.forEach {
-                        RegisteredSimCard(simCard = it, onRemoveClick = onRemoveSimCard)
+                        RegisteredSimCard(simCard = it, onClick = onSimCardClick)
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
@@ -146,7 +156,7 @@ fun DashboardScreenContent(
 
 @Composable
 private fun RegisteredSimCard(
-    simCard: SimCard, onClick: () -> Unit = {}, onRemoveClick: (SimCard) -> Unit = {}
+    simCard: SimCard, onClick: (SimCard) -> Unit = {}
 ) {
     val serviceNumberCode = simCard.phoneNumber.replace("+88", "").substring(0..2)
     val backgroundColor = when (serviceNumberCode) {
@@ -164,7 +174,7 @@ private fun RegisteredSimCard(
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier.fillMaxWidth(),
-        onClick = onClick
+        onClick = { onClick(simCard) }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -189,16 +199,16 @@ private fun RegisteredSimCard(
                 )
             }
             IconButton(
-                onClick = { onRemoveClick(simCard) }
+                onClick = { onClick(simCard) }
             ) {
                 Icon(
-                    imageVector = Icons.Default.Clear,
-                    contentDescription = "Remove SIM Card",
+                    imageVector = Icons.AutoMirrored.Default.ArrowForwardIos,
+                    contentDescription = "Sim Card Details",
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
                         .size(28.dp)
                         .background(
-                            color = MaterialTheme.colorScheme.error,
+                            color = MaterialTheme.colorScheme.secondary,
                             shape = RoundedCornerShape(50)
                         )
                         .padding(6.dp)
